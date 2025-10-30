@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Tickétalo - Registro</title>
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- CSS -->
+    <link href="/css/registro.css" rel="stylesheet">
+
+</head>
+
+<body class="registro-body">
+    <div class="registro-container">
+        <form th:action="@{/guardar}" th:object="${usuario}" method="post" class="registro-form">
+
+            <h2 class="text-center mb-4">Registrarte en Tickéalo</h2>
+
+        <!-- Formulario de Registro -->
+        <form th:action="@{/guardar}" th:object="${usuario}" method="post">
+
+            <div class="mb-3">
+                <label>Nombres</label>
+                <input type="text" th:field="*{nombre}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Apellidos</label>
+                <input type="text" th:field="*{apellido}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('apellido')}" th:errors="*{apellido}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Correo</label>
+                <input type="email" th:field="*{correo}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('correo')}" th:errors="*{correo}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Teléfono</label>
+                <input type="text" th:field="*{telefono}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('telefono')}" th:errors="*{telefono}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Tipo de Documento</label>
+                <select th:field="*{doc}" class="form-select">
+                    <option value="">Selecciona...</option>
+                    <option value="DNI">DNI</option>
+                    <option value="CE">Carnet de Extranjería</option>
+                    <option value="PASAPORTE">Pasaporte</option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('doc')}" th:errors="*{doc}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Número de Documento</label>
+                <input type="text" th:field="*{docNumero}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('docNumero')}" th:errors="*{docNumero}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Sexo</label>
+                <select th:field="*{sexo}" class="form-select">
+                    <option value="">Selecciona...</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Femenino</option>
+                    <option value="O">Otro</option>
+                </select>
+                <div class="text-danger" th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label>Fecha Nac.</label>
+                <input type="date" th:field="*{fechaNac}" class="form-control">
+                <div class="text-danger" th:if="${#fields.hasErrors('fechaNac')}" th:errors="*{fechaNac}"></div>
+                <div class="text-danger" th:if="${#fields.hasErrors('mayorDeEdad')}" th:errors="*{mayorDeEdad}"></div>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label>Contraseña</label>
+                <input type="password" th:field="*{contrasena}" class="form-control" id="contrasena">
+                <i class="bi bi-eye position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer;"
+                    onclick="togglePassword('contrasena', this)"></i>
+                <div class="text-danger" th:if="${#fields.hasErrors('contrasena')}" th:errors="*{contrasena}"></div>
+            </div>
+
+            <div class="mb-3 position-relative">
+                <label>Confirmar Contraseña</label>
+                <input type="password" th:field="*{confirmarContrasena}" class="form-control" id="confirmarContrasena">
+                <i class="bi bi-eye position-absolute top-50 end-0 translate-middle-y me-3" style="cursor: pointer;"
+                    onclick="togglePassword('confirmarContrasena', this)"></i>
+                <div class="text-danger" th:if="${#fields.hasErrors('confirmarContrasena')}"
+                    th:errors="*{confirmarContrasena}"></div>
+            </div>
+
+            <button type="submit" class="btn btn-danger w-100 fw-bold">Registrarse</button>
+
+            <p class="text-center mt-3">
+                Si ya tienes cuenta <a th:href="@{/login}" class="link-primary fw-semibold">Inicia Sesión</a>
+            </p>
+
+        </form>
+    </div>
+    <!-- MODAL DE REGISTRO(en mejora el estilo--en prueba 1/2) -->
+    <div class="modal fade" id="registroExitosoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-dark">Registro Exitoso!😏</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    Tu cuenta ha sido registrada correctamente. Ahora puedes iniciar sesión cuando desees.
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Entendido</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script th:inline="javascript">
+        var registroExitoso = /*[[${registroExitoso}]]*/ false;
+    </script>
+    <script src="/js/registro.js"></script>
+
+
+
+</body>
+
+</html>
